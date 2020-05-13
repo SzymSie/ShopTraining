@@ -14,7 +14,8 @@ namespace ShopTraining.Profiles
         {
             CreateMap<Product, ProductReadDto>();
             CreateMap<ProductCreateDto, Product>();
-            CreateMap<Product, ProductCreateDto>();
+            CreateMap<ProductUpdateDto, Product>();
+            CreateMap<Product, ProductUpdateDto>();
         }
     }
 }

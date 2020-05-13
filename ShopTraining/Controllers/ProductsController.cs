@@ -53,12 +53,8 @@ namespace ShopTraining.Controllers
             //return Ok(productReadDto);
         }
 
-
-
-        // TO DO
-
         [HttpPut("{id}")]
-        public ActionResult UpdateProduct(int id, ProductCreateDto updatedDto)
+        public ActionResult UpdateProduct(int id, ProductUpdateDto updatedDto)
         {
             var productModelFromRepo = _repository.GetProductById(id);
             if (productModelFromRepo == null) return NotFound();
@@ -69,17 +65,13 @@ namespace ShopTraining.Controllers
             return NoContent();
         }
 
-
-        // TO DO
-
-
         [HttpPatch("{id}")]
-        public ActionResult PartialProductUpdate(int id, JsonPatchDocument<ProductCreateDto> patchDoc)
+        public ActionResult PartialProductUpdate(int id, JsonPatchDocument<ProductUpdateDto> patchDoc)
         {
             var productModelFromRepo = _repository.GetProductById(id);
             if (productModelFromRepo == null) return NotFound();
 
-            var productToPatch = _mapper.Map<ProductCreateDto>(productModelFromRepo);
+            var productToPatch = _mapper.Map<ProductUpdateDto>(productModelFromRepo);
             patchDoc.ApplyTo(productToPatch, ModelState);
 
             if (!TryValidateModel(productToPatch))
@@ -93,7 +85,6 @@ namespace ShopTraining.Controllers
         }
 
         [HttpDelete("{id}")]
-
         public ActionResult DeleteProduct(int id)
         {
             var productModelFromRepo = _repository.GetProductById(id);
