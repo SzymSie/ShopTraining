@@ -9,11 +9,11 @@ namespace ShopTraining.Data
 {
     public class SqlProductRepo : IProductRepo
     {
-        private readonly ProductContext _contex;
+        private readonly ProductContext _context;
 
         public SqlProductRepo(ProductContext context) 
         {
-            _contex = context;
+            _context = context;
         }
         public async void CreateProductAsync(Product product)
         {
@@ -21,7 +21,7 @@ namespace ShopTraining.Data
             {
                 throw new ArgumentNullException(nameof(product));
             }
-            await _contex.Products.AddAsync(product);
+            await _context.Products.AddAsync(product);
         }
 
         public async void DeleteProductAsync(Product product)
@@ -30,23 +30,23 @@ namespace ShopTraining.Data
             {
                 throw new ArgumentNullException(nameof(product));
             }
-            _contex.Products.Remove(product);
-            await _contex.SaveChangesAsync();
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Product>> GetAllProductsAsync()
         {
-            return await _contex.Products.ToListAsync();
+            return await _context.Products.ToListAsync();
         }
 
         public async Task<Product> GetProductByIdAsync(int id)
         {
-            return await _contex.Products.FirstOrDefaultAsync(p => p.Id == id);
+            return await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task<bool> SaveChangesAsync()
         {
-            return (await _contex.SaveChangesAsync() >= 0);
+            return (await _context.SaveChangesAsync() >= 0);
         }
 
         public async void UpdateProductAsync(Product product)
