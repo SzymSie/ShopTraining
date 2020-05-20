@@ -42,11 +42,11 @@ namespace ShopTraining.Controllers
         }
 
         [HttpPost]
-        public ActionResult<ProductReadDto> CreateProduct(ProductCreateDto dto)
+        public async Task<ActionResult<ProductReadDto>> CreateProduct(ProductCreateDto dto)
         {
             var productModel = _mapper.Map<Product>(dto);
-            _repository.CreateProductAsync(productModel);
-            _repository.SaveChangesAsync();
+            await _repository.CreateProductAsync(productModel);
+            await _repository.SaveChangesAsync();
 
             var productReadDto = _mapper.Map<ProductReadDto>(productModel);
             return CreatedAtRoute(nameof(GetProductById), new { Id = productReadDto.Id }, productReadDto);
@@ -54,19 +54,19 @@ namespace ShopTraining.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult UpdateProduct(int id, ProductUpdateDto updatedDto)
+        public async Task<ActionResult> UpdateProduct(int id, ProductUpdateDto updatedDto)
         {
             Product productModelFromRepo = _repository.GetProductByIdAsync(id).Result;
             if (productModelFromRepo == null) return NotFound();
 
             _mapper.Map(updatedDto, productModelFromRepo);
-            _repository.UpdateProductAsync(productModelFromRepo);
-            _repository.SaveChangesAsync();
+            await _repository.UpdateProductAsync(productModelFromRepo);
+            await _repository.SaveChangesAsync();
             return NoContent();
         }
 
         [HttpPatch("{id}")]
-        public ActionResult PartialProductUpdate(int id, JsonPatchDocument<ProductUpdateDto> patchDoc)
+        public async Task<ActionResult> PartialProductUpdate(int id, JsonPatchDocument<ProductUpdateDto> patchDoc)
         {
             var productModelFromRepo = _repository.GetProductByIdAsync(id).Result;
             if (productModelFromRepo == null) return NotFound();
@@ -79,19 +79,19 @@ namespace ShopTraining.Controllers
                return ValidationProblem(ModelState);
             }
             _mapper.Map(productToPatch, productModelFromRepo);
-            _repository.UpdateProductAsync(productModelFromRepo);
-            _repository.SaveChangesAsync();
+            await _repository.UpdateProductAsync(productModelFromRepo);
+            await _repository.SaveChangesAsync();
             return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public ActionResult DeleteProduct(int id)
+        public async Task<ActionResult> DeleteProduct(int id)
         {
             var productModelFromRepo = _repository.GetProductByIdAsync(id).Result;
             if (productModelFromRepo == null) return NotFound();
 
-            _repository.DeleteProductAsync(productModelFromRepo);
-            _repository.SaveChangesAsync();
+            await _repository.DeleteProductAsync(productModelFromRepo);
+            await _repository.SaveChangesAsync();
 
             return NoContent();
         }

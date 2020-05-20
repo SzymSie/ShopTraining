@@ -13,8 +13,8 @@ namespace ShopTraining.Data
 
         Task<IEnumerable<Product>> GetAllProductsAsync();
         Task<Product> GetProductByIdAsync(int id);
-        void CreateProductAsync(Product product);
-        void UpdateProductAsync(Product product);
-        void DeleteProductAsync(Product product);
+        Task CreateProductAsync(Product product);
+        Task UpdateProductAsync(Product product);
+        Task DeleteProductAsync(Product product);
     }
 }

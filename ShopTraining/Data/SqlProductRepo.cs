@@ -15,7 +15,7 @@ namespace ShopTraining.Data
         {
             _context = context;
         }
-        public async void CreateProductAsync(Product product)
+        public async Task CreateProductAsync(Product product)
         {
             if (product == null)
             {
@@ -24,7 +24,7 @@ namespace ShopTraining.Data
             await _context.Products.AddAsync(product);
         }
 
-        public async void DeleteProductAsync(Product product)
+        public async Task DeleteProductAsync(Product product)
         {
             if (product == null)
             {
@@ -49,9 +49,14 @@ namespace ShopTraining.Data
             return (await _context.SaveChangesAsync() >= 0);
         }
 
-        public async void UpdateProductAsync(Product product)
+        public async Task UpdateProductAsync(Product product)
         {
-            
+            if (product == null)
+            {
+                throw new ArgumentNullException(nameof(product));
+            }
+            _context.Products.Update(product);
+            await _context.SaveChangesAsync();
         }
     }
 }
