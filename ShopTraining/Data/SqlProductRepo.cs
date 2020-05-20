@@ -1,4 +1,5 @@
-﻿using ShopTraining.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using ShopTraining.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,40 +15,41 @@ namespace ShopTraining.Data
         {
             _contex = context;
         }
-        public void CreateProduct(Product product)
+        public async void CreateProductAsync(Product product)
         {
-            if (product == null) 
+            if (product == null)
             {
                 throw new ArgumentNullException(nameof(product));
             }
-            _contex.Products.Add(product);
+            await _contex.Products.AddAsync(product);
         }
 
-        public void DeleteProduct(Product product)
+        public async void DeleteProductAsync(Product product)
         {
             if (product == null)
             {
                 throw new ArgumentNullException(nameof(product));
             }
             _contex.Products.Remove(product);
+            await _contex.SaveChangesAsync();
         }
 
-        public IEnumerable<Product> GetAllProducts()
+        public async Task<IEnumerable<Product>> GetAllProductsAsync()
         {
-            return _contex.Products.ToList();
+            return await _contex.Products.ToListAsync();
         }
 
-        public Product GetProductById(int id)
+        public async Task<Product> GetProductByIdAsync(int id)
         {
-            return _contex.Products.FirstOrDefault(p => p.Id == id);
+            return await _contex.Products.FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public bool SaveChanges()
+        public async Task<bool> SaveChangesAsync()
         {
-            return (_contex.SaveChanges() >= 0);
+            return (await _contex.SaveChangesAsync() >= 0);
         }
 
-        public void UpdateProduct(Product product)
+        public async void UpdateProductAsync(Product product)
         {
             
         }
