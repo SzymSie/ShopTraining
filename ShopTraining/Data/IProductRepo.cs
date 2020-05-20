@@ -9,12 +9,12 @@ namespace ShopTraining.Data
 {
     public interface IProductRepo
     {
-        bool SaveChanges();
+        Task<bool> SaveChangesAsync();
 
-        IEnumerable<Product> GetAllProducts();
-        Product GetProductById(int id);
-        void CreateProduct(Product product);
-        void UpdateProduct(Product product);
-        void DeleteProduct(Product product);
+        Task<IEnumerable<Product>> GetAllProductsAsync();
+        Task<Product> GetProductByIdAsync(int id);
+        void CreateProductAsync(Product product);
+        void UpdateProductAsync(Product product);
+        void DeleteProductAsync(Product product);
     }
 }

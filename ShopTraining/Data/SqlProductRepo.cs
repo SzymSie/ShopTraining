@@ -1,4 +1,5 @@
-﻿using ShopTraining.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using ShopTraining.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,46 +9,47 @@ namespace ShopTraining.Data
 {
     public class SqlProductRepo : IProductRepo
     {
-        private readonly ProductContext _contex;
+        private readonly ProductContext _context;
 
         public SqlProductRepo(ProductContext context) 
         {
-            _contex = context;
+            _context = context;
         }
-        public void CreateProduct(Product product)
-        {
-            if (product == null) 
-            {
-                throw new ArgumentNullException(nameof(product));
-            }
-            _contex.Products.Add(product);
-        }
-
-        public void DeleteProduct(Product product)
+        public async void CreateProductAsync(Product product)
         {
             if (product == null)
             {
                 throw new ArgumentNullException(nameof(product));
             }
-            _contex.Products.Remove(product);
+            await _context.Products.AddAsync(product);
         }
 
-        public IEnumerable<Product> GetAllProducts()
+        public async void DeleteProductAsync(Product product)
         {
-            return _contex.Products.ToList();
+            if (product == null)
+            {
+                throw new ArgumentNullException(nameof(product));
+            }
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
         }
 
-        public Product GetProductById(int id)
+        public async Task<IEnumerable<Product>> GetAllProductsAsync()
         {
-            return _contex.Products.FirstOrDefault(p => p.Id == id);
+            return await _context.Products.ToListAsync();
         }
 
-        public bool SaveChanges()
+        public async Task<Product> GetProductByIdAsync(int id)
         {
-            return (_contex.SaveChanges() >= 0);
+            return await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public void UpdateProduct(Product product)
+        public async Task<bool> SaveChangesAsync()
+        {
+            return (await _context.SaveChangesAsync() >= 0);
+        }
+
+        public async void UpdateProductAsync(Product product)
         {
             
         }

@@ -24,29 +24,29 @@ namespace ShopTraining.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<ProductReadDto>> GetAllProducts()
+        public async Task<ActionResult<IEnumerable<ProductReadDto>>> GetAllProducts()
         {
-            var productItems = _repository.GetAllProducts();
+            var productItems = await _repository.GetAllProductsAsync();
             return Ok(_mapper.Map<IEnumerable<ProductReadDto>>(productItems));
         }
 
         [HttpGet("{id}", Name = "GetProductById")]
-        public ActionResult<ProductReadDto> GetProductById(int id)
+        public async Task<ActionResult<ProductReadDto>> GetProductById(int id)
         {
-            var productItem = _repository.GetProductById(id);
-            if (productItem != null)
+            var productItem = await _repository.GetProductByIdAsync(id);
+            if (productItem == null)
             {
-                return Ok(_mapper.Map<ProductReadDto>(productItem));
+                return NotFound();
             }
-            return NotFound();
+            return Ok(_mapper.Map<ProductReadDto>(productItem));
         }
 
         [HttpPost]
         public ActionResult<ProductReadDto> CreateProduct(ProductCreateDto dto)
         {
             var productModel = _mapper.Map<Product>(dto);
-            _repository.CreateProduct(productModel);
-            _repository.SaveChanges();
+            _repository.CreateProductAsync(productModel);
+            _repository.SaveChangesAsync();
 
             var productReadDto = _mapper.Map<ProductReadDto>(productModel);
             return CreatedAtRoute(nameof(GetProductById), new { Id = productReadDto.Id }, productReadDto);
@@ -56,19 +56,19 @@ namespace ShopTraining.Controllers
         [HttpPut("{id}")]
         public ActionResult UpdateProduct(int id, ProductUpdateDto updatedDto)
         {
-            var productModelFromRepo = _repository.GetProductById(id);
+            Product productModelFromRepo = _repository.GetProductByIdAsync(id).Result;
             if (productModelFromRepo == null) return NotFound();
 
             _mapper.Map(updatedDto, productModelFromRepo);
-            _repository.UpdateProduct(productModelFromRepo);
-            _repository.SaveChanges();
+            _repository.UpdateProductAsync(productModelFromRepo);
+            _repository.SaveChangesAsync();
             return NoContent();
         }
 
         [HttpPatch("{id}")]
         public ActionResult PartialProductUpdate(int id, JsonPatchDocument<ProductUpdateDto> patchDoc)
         {
-            var productModelFromRepo = _repository.GetProductById(id);
+            var productModelFromRepo = _repository.GetProductByIdAsync(id).Result;
             if (productModelFromRepo == null) return NotFound();
 
             var productToPatch = _mapper.Map<ProductUpdateDto>(productModelFromRepo);
@@ -76,22 +76,22 @@ namespace ShopTraining.Controllers
 
             if (!TryValidateModel(productToPatch))
             {
-                return ValidationProblem(ModelState);
+               return ValidationProblem(ModelState);
             }
             _mapper.Map(productToPatch, productModelFromRepo);
-            _repository.UpdateProduct(productModelFromRepo);
-            _repository.SaveChanges();
+            _repository.UpdateProductAsync(productModelFromRepo);
+            _repository.SaveChangesAsync();
             return NoContent();
         }
 
         [HttpDelete("{id}")]
         public ActionResult DeleteProduct(int id)
         {
-            var productModelFromRepo = _repository.GetProductById(id);
+            var productModelFromRepo = _repository.GetProductByIdAsync(id).Result;
             if (productModelFromRepo == null) return NotFound();
 
-            _repository.DeleteProduct(productModelFromRepo);
-            _repository.SaveChanges();
+            _repository.DeleteProductAsync(productModelFromRepo);
+            _repository.SaveChangesAsync();
 
             return NoContent();
         }
