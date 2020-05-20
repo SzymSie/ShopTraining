@@ -19,7 +19,7 @@ namespace ShopTraining.Dtos
         public string Category { get; set; }
 
 
-        public float Price { get; set; }
+        public decimal Price { get; set; }
 
 
         public int Quantity { get; set; }
