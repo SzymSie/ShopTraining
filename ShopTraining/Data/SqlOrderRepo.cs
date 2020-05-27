@@ -100,5 +100,15 @@ namespace ShopTraining.Data
             await _context.SaveChangesAsync();
         }
 
+        public async Task DeleteAllProductsFromCustomerOrderAsync(int customerId)
+        {
+            _context.RemoveRange(_context.Orders.Where(p => p.CustomerId == customerId));
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Order>> GetAllOrdersAsync()
+        {
+            return await _context.Orders.ToListAsync();
+        }
     }
 }

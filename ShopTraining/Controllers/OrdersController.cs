@@ -33,6 +33,12 @@ namespace ShopTraining.Controllers
             var orders = await _repository.GetOrdersByCustomerId(id);
             return Ok(_mapper.Map<IEnumerable<OrderDto>>(orders));
         }
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Order>>> GetAllOrders()
+        {
+            var orders = await _repository.GetAllOrdersAsync();
+            return Ok(_mapper.Map<IEnumerable<OrderDto>>(orders));
+        }
 
         [HttpPost]
         public async Task<ActionResult<Order>> AddProductToOrderAsync(OrderDto dto)
@@ -69,5 +75,26 @@ namespace ShopTraining.Controllers
             return NoContent();
         }
 
+        [HttpDelete("{id}/clearOrder")]
+        public async Task<ActionResult<IEnumerable<Order>>> DeleteAllProductsFromCustomerOrder(int id)
+        {
+
+            await _repository.DeleteAllProductsFromCustomerOrderAsync(id);
+            await _repository.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateProductQuantityInOrder(int id, OrderDto updatedDto)
+        {
+            Order orderModelFromRepo = _repository.GetProductByIdAsync(id).Result;
+            if (orderModelFromRepo == null) return NotFound();
+
+            _mapper.Map(updatedDto, orderModelFromRepo);
+            await _repository.UpdateOrderAsync(orderModelFromRepo);
+            await _repository.SaveChangesAsync();
+            return NoContent();
+        }
     }
 }

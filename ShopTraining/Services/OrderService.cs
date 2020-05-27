@@ -18,33 +18,6 @@ namespace ShopTraining.Services
             _repo = repo;
         }
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        // public Order GetBasket (IServiceProvider services)
-        //{
-        //    ISession session = services.GetRequiredService<IHttpContextAccessor>()?.HttpContext.Session;
-        //    var conttext = services.GetService<AppContext>();
-
-        //    string basketId = session.GetString("CustomerId") ?? Guid.NewGuid().ToString();
-        //    session.SetString("BasketId", basketId);
-        //    return new Order(conttext) { CustomerId = basketId };
-            
-            
-        //}
-         
 
     }
 }
