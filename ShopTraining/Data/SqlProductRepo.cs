@@ -9,9 +9,9 @@ namespace ShopTraining.Data
 {
     public class SqlProductRepo : IProductRepo
     {
-        private readonly ProductContext _context;
+        private readonly AppDbContext _context;
 
-        public SqlProductRepo(ProductContext context) 
+        public SqlProductRepo(AppDbContext context) 
         {
             _context = context;
         }

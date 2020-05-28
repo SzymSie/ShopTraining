@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using ShopTraining.Models;
 using System;
 using System.Collections.Generic;
@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 
 namespace ShopTraining.Data
 {
-    public class ProductContext : DbContext
+    public class AppDbContext : DbContext
     {
-        public ProductContext(DbContextOptions<ProductContext> opt) : base(opt)
+        public AppDbContext(DbContextOptions<AppDbContext> opt) : base(opt)
         {
             
         }
 
         public DbSet<Product> Products { get; set; }
+        public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
     }
 }
